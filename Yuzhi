@@ -1,0 +1,47 @@
+
+cd('E:\实验\结果1');
+Result=zeros(8528,1);
+for b=1:2
+    cd('E:\实验\3\训练集\');
+    if ~exist(num2str(b),'dir')==0
+        path2=strcat('E:\实验\3\训练集\',num2str(b),'\*.mat');
+        Awenjian=dir(path2);
+        for c=1:8528
+            similar=0;
+            cd('E:\实验\3\测试集\');
+            if ~exist(num2str(c),'dir')==0
+                path1=strcat('E:\实验\3\测试集\',num2str(c),'\*.mat');
+                
+                Mwenjian=dir(path1);%读取文件路径下的所有.mat格式的文件，并以列表的形式呈现
+                
+                a=1;
+                load(['E:\实验\3\测试集\', num2str(c),'\',Mwenjian(a).name]);
+                
+                f=C2(350:599,1:180);
+                XunLian=reshape(f,1,45000);
+                for i=1:5
+                    load(['E:\实验\3\训练集\', num2str(b),'\',Awenjian(i).name]);
+                    disp(Awenjian(i).name);
+                    
+                    e=C1(350:599,1:180);%取a的(3-5行,4-5列)
+                    
+                    CeShi=reshape(e,1,45000);
+                    
+                    G=[f;e];
+                    
+                    xishu=abs(corr2(XunLian,CeShi));%相关系数
+                    
+                    similar=similar+xishu;
+                end
+            else
+                similar=0;
+            end
+            Result(c,a)=similar;
+        end
+        
+        name=Awenjian(1).name(1:6);
+    end
+    savePath=strcat('E:\实验\阈值结果\',name);
+    
+    save(savePath,'Result');
+end
