@@ -1,0 +1,30 @@
+Rwenjian=dir('E:\实验\单波（备份）\随机单波\*.mat');%R点位置文件
+Mwenjian=dir('E:\实验\单波（备份）\随机单波1\*.mat');
+for a=10 %叠加矩阵的数据
+    load(['E:\实验\单波（备份）\随机单波\',Rwenjian(a).name]);
+    A=R(7,:);
+    for b=1:7836 %叠加矩阵的数据
+        load(['E:\实验\单波（备份）\随机单波1\',Mwenjian(b).name]);
+        similar=0;
+        for i=1:5
+            
+            %             A=R(i,:);
+            B=RR(i,:);
+            G=[A;B];
+%             xishu=pdist(G,'euclidean');
+            %              xishu=1-pdist(G,'cosine');
+                        xishu=abs(corr2(A,B));
+                        similar=similar+xishu;
+%             xishu= pdist(G, 'cityblock') ;
+            
+        end
+        Result(b,1)=similar;
+    end
+    
+    name=Rwenjian(a).name(1:6);
+    
+    savePath=strcat('E:\实验\单波（备份）\测试\',name);
+    
+    save(savePath,'Result');
+    
+end
