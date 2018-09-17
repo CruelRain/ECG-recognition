@@ -1,0 +1,127 @@
+for xunliangeshu=5:5 %28个测试文件
+    if(xunliangeshu<10)%这个if条件判断主要是因为matlab的读取使用的是高位读取法（2-7行）
+       xunliangeshu1=strcat('0',int2str(xunliangeshu));
+       %xunliangeshu1=int2str(xunliangeshu);
+    else
+        xunliangeshu1=int2str(xunliangeshu);
+    end
+   folderName{xunliangeshu}=[int2str(xunliangeshu)];%每个人创建一个文件夹存放叠加次数矩阵
+   mkdir(folderName{xunliangeshu});
+filepath='E:\实验室\状态实验\';
+filename=strcat('res',xunliangeshu1,'.txt');
+disp(filename);%控制台查看文件名
+file = [filepath filename];
+fid = fopen(file,'rt'); 
+A=zeros(20,120);%存放单周期心电信号的矩阵A
+i=1;
+if fid == -1 
+end 
+%%读取文件 
+while 1 
+nextline = fgetl(fid); %读第一行 
+i=i+1;
+if ~ischar(nextline), break, end %读到最后跳出 
+%disp(i);%这行可以不要 
+a = sscanf(nextline, ' %f %f ');%读取数据，根据你自己的需要改 
+A(i,:)=a;
+end
+fclose(fid);
+juzhengeshu=i/20;%多少个叠加矩阵                                                                                                                                                                                                                                                                                                                                                                                                                               
+for b1=1:juzhengeshu %构建叠加矩阵
+    C=zeros(1200,120);%存放最初的次数叠加矩阵
+for b=1:20%小循环，循环读取20条单周期心电信号
+    b2=(b1-1)*20+b;
+    for c=1:120
+    d=A(b2,c);%取值
+    e=d/450;
+    d=500-e+1;%降低精度，36-38行
+    d=uint16(d);%取整
+    if(d==1)
+      if(c>1&&c<120)
+          C(d,c)=C(d,c)+2;
+          C(d+1,c)=C(d+1,c)+1;
+          C(d,c-1)=C(d,c-1)+1;
+          C(d+1,c-1)=C(d+1,c-1)+1;
+          C(d,c+1)=C(d,c+1)+1;
+          C(d+1,c+1)=C(d+1,c+1)+1;
+        elseif(c==1)
+          C(d,1)=C(d,1)+2;
+          C(d+1,1)=C(d+1,1)+1;
+          C(d,2)=C(d,2)+1;
+          C(d+1,2)=C(d+1,2)+1;
+        elseif(c==120)
+          C(d,120)=C(d,120)+2;
+          C(d+1,120)=C(d+1,120)+1;
+          C(d,119)=C(d,119)+1;
+          C(d+1,119)=C(d+1,119)+1; 
+      end
+    elseif(d==1200)
+        if(c>1&&c<120)
+            C(1200,c)=C(1200,c)+2;
+            C(1200,c-1)=C(1200,c-1)+1;
+            C(1200,c+1)=C(1200,c+1)+1;
+            C(1199,c)=C(1199,c)+1;
+            C(1199,c+1)=C(1199,c+1)+1;
+            C(1199,c-1)=C(1199,c-1)+1;
+        elseif(c==1)
+            C(1200,c)=C(1200,c)+2;
+            C(1200,c+1)=C(1200,c+1)+1;
+            C(1199,c)=C(1199,c)+1;
+            C(1199,c+1)=C(1199,c+1)+1;
+        elseif(c==120) 
+            C(1200,c)=C(1200,c)+2;
+            C(1200,c-1)=C(1200,c-1)+1;
+            C(1199,c)=C(1199,c)+1;
+            C(1199,c-1)=C(1199,c-1)+1;  
+        end
+    else
+        if(c>1&&c<120)
+          C(d,c)=C(d,c)+2;
+          C(d+1,c)=C(d+1,c)+1;
+          C(d-1,c)=C(d-1,c)+1;
+          C(d,c-1)=C(d,c-1)+1;
+          C(d+1,c-1)=C(d+1,c-1)+1;
+          C(d-1,c-1)=C(d-1,c-1)+1;
+          C(d,c+1)=C(d,c+1)+1;
+          C(d-1,c+1)=C(d-1,c+1)+1;
+          C(d+1,c+1)=C(d+1,c+1)+1;
+        elseif(c==1)
+          C(d,1)=C(d,1)+2;
+          C(d-1,1)=C(d-1,1)+1;
+          C(d+1,1)=C(d+1,1)+1;
+          C(d,2)=C(d,2)+1;
+          C(d-1,2)=C(d-1,2)+1;
+          C(d+1,2)=C(d+1,2)+1;
+        elseif(c==120)
+          C(d,120)=C(d,120)+2;
+          C(d-1,120)=C(d-1,120)+1;
+          C(d+1,120)=C(d+1,120)+1;
+          C(d,119)=C(d,119)+1;
+          C(d-1,119)=C(d-1,119)+1;
+          C(d+1,119)=C(d+1,119)+1;   
+        end
+    end 
+    end
+end
+           C1=zeros(1200,120);
+           for e0=1:1200%遍历矩阵，排除奇异波形对矩阵的影响
+               for e1=1:120
+                   if(C(e0,e1)>1)%2以上的点才有意义
+                    C1(e0,e1)=C(e0,e1); %重叠次数矩阵
+                   end
+               end
+           end
+if(b1<10)%if条件，同样是给生成的矩阵编号
+    juzhenxuhao=strcat('00 ',int2str(b1));
+elseif(b1>9&&b1<100)
+    juzhenxuhao=strcat('0 ',int2str(b1));
+else
+    juzhenxuhao=int2str(b1);
+end
+filename2=strcat('-',juzhenxuhao);
+filename3=strcat(xunliangeshu1,filename2);
+filename4=strcat('moban20-',filename3);
+baocun=strcat(folderName{xunliangeshu},'\');
+save([baocun,filename4],'C1');
+end
+end
