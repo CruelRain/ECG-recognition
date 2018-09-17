@@ -1,0 +1,15 @@
+% cd('E:\实验\阈值1');
+A=zeros(1,1);
+Rwenjian=dir('E:\实验\单波（备份）\150\阈值结果1\*.mat');
+for i=1:150;
+    load(['E:\实验\单波（备份）\150\阈值结果1\',Rwenjian(i).name]);
+    disp(Rwenjian(i).name);
+    R=sort(Result,1,'descend');
+    a=R(2,1);
+    A(1,1)=a;
+    b=Rwenjian(i).name(2:6);
+    c=str2num(b);
+    name=num2str(c);
+    savePath=strcat('E:\实验\单波（备份）\150\阈值\',name);
+    save(savePath,'A','R');
+end
