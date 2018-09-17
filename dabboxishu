@@ -1,0 +1,9 @@
+Rwenjian=dir('E:\实验\单波（备份）\随机单波\*.mat');%R点位置文件
+for a=1:7836 %叠加矩阵的数据
+    load(['E:\实验\单波（备份）\随机单波\',Rwenjian(a).name]);
+    RR=R;
+    name=Rwenjian(a).name(1:6);
+    savePath=strcat('E:\实验\单波（备份）\随机单波1\',name);
+        
+        save(savePath,'RR');
+end
