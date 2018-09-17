@@ -1,0 +1,15 @@
+Mwenjian=dir('E:\实验\training2017\*.mat');
+%  temp=zeros(1,1);
+for i=8462:8528
+    load(['E:\实验\training2017\',Mwenjian(i).name]);
+%   
+
+   temp=val;
+    name=Mwenjian(i).name(1:6);
+     [m,n,R]=plotPQRST(name);%[temp_N,Rpoint_N,R_result]=plotPQRST(name)对应
+     R_points(i,1:n)=R;
+    
+    
+end
+
+ save('R','R_points')
