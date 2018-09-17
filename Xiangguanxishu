@@ -1,0 +1,59 @@
+cd('E:\实验\结果1');
+Result=zeros(8528,1);
+for b=1
+    cd('E:\实验\3\测试集\');
+    
+    if ~exist(num2str(b),'dir')==0
+        path2=strcat('E:\实验\3\测试集\',num2str(b),'\*.mat');
+        
+        
+        Awenjian=dir(path2);
+        i=1;
+        %         for i=1:5
+        load(['E:\实验\3\测试集\', num2str(b),'\',Awenjian(i).name]);
+        disp(Awenjian(i).name);
+%         C2=zeros(1200,150);
+         e=C2(350:599,1:180);%取a的(3-5行,4-5列)
+%         CeShi=reshape(C2,1,180000);
+         CeShi=reshape(e,1,45000);
+        %     CeShi=MsingleWave_test;
+        tic
+        for c=11:8528
+            similar=0;
+            cd('E:\实验\3\训练集\');
+            if ~exist(num2str(c),'dir')==0
+                path1=strcat('E:\实验\3\训练集\',num2str(c),'\*.mat');
+                
+                Mwenjian=dir(path1);%读取文件路径下的所有.mat格式的文件，并以列表的形式呈现
+                
+                for a=1:5
+                    load(['E:\实验\3\训练集\', num2str(c),'\',Mwenjian(a).name]);
+%                     XunLian=reshape(C1,1,180000);
+%                     C1=zeros(1200,150); 
+                     f=C1(350:599,1:180);
+                     XunLian=reshape(f,1,45000);
+                    %        XunLian=MsingleWave_train;
+%                     G=[XunLian;CeShi];
+                     G=[f;e];
+%                     xishu=1-pdist(G,'cosine');%夹角余弦
+%                     xishu=pdist(G,'euclidean');%欧氏距离 1/（1+Distance(X,Y)）
+%                       xishu=abs(corr2(XunLian,CeShi));%相关系数
+                      xishu=subspace(f,e);%相关系数
+%                       xishu=corr2(f,e);
+%                       xishu= pdist(G, 'cityblock') ;%曼哈顿距离
+                    similar=similar+xishu;
+                end
+            else
+                similar=0;
+            end
+            Result(c,i)=similar;
+            toc
+        end
+        
+        name=Awenjian(1).name(1:6);
+    end
+    savePath=strcat('E:\实验\结果\',name);
+    
+    save(savePath,'Result');
+end
+% end
