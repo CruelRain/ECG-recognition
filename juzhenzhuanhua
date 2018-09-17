@@ -1,0 +1,30 @@
+
+for c=1:8528
+    R=zeros(5,45000);
+    
+    cd('E:\实验\3\训练集\');
+    if ~exist(num2str(c),'dir')==0
+        path1=strcat('E:\实验\3\训练集\',num2str(c),'\*.mat');
+        
+        Mwenjian=dir(path1);%读取文件路径下的所有.mat格式的文件，并以列表的形式呈现
+        
+        for a=1:5
+            load(['E:\实验\3\训练集\', num2str(c),'\',Mwenjian(a).name]);
+            %                     XunLian=reshape(C1,1,180000);
+            %                     C1=zeros(1200,150);
+            f=C1(350:599,1:180);
+            X=reshape(f,1,45000);
+            R(a,:)=X;
+            
+            
+        end
+        nemo=Mwenjian(1).name(2:6);
+        b=str2num(nemo);
+        A=[b;b;b;b;b];
+        R(:,45001)=A;
+        name=Mwenjian(1).name(1:6);
+        savePath=strcat('E:\实验\转化矩阵\',name);
+        save(savePath,'R');
+        
+    end
+end
