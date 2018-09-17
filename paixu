@@ -1,0 +1,19 @@
+cd('E:\实验\模板匹配结果');
+B=zeros(8528,100);
+Rwenjian=dir('E:\实验\模板匹配结果\*.mat');
+ i=7837;
+    load(['E:\实验\模板匹配结果\',Rwenjian(i).name]);
+    for a=1:100
+        B=sort(A,a);
+        A=B;
+        %     R=sort(Result);
+        
+        %    R=sort(Result,1,'descend');
+    end
+    R=sort(B,1,'descend');
+    
+    
+    
+    %     R=10000*R;
+   
+
