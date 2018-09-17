@@ -1,0 +1,39 @@
+cd('E:\实验\矩阵拆分\拆分\测试\正常');
+% Rwenjian=dir('E:\实验\矩阵拆分\正常\*.mat');%R点位置文件
+for a=1
+    %    load(['E:\实验\矩阵拆分\正常\',a,'.mat']);
+    path2=strcat('E:\实验\矩阵拆分\正常\',num2str(a),'\*.mat');
+    Awenjian=dir(path2);
+    for i=1
+        load(['E:\实验\矩阵拆分\正常\',num2str(a),'\',Awenjian(i).name]);
+        name=Awenjian(i).name(1:15);
+        %         savePath=strcat('E:\实验\结果\',name);
+        %         save(savePath,'Result');
+        folderName{a}=name;
+        mkdir(folderName{a});
+        j=max(max(C1));
+        k=1;
+        while j>1
+            B=C1-1; 
+            A=B;
+            A(find( A<0 ))=0;
+            A(find( A>1 ))=1;
+%             B=A*0;
+%             B(find(A<0))=0;
+%             C(find(B>1))=1;
+            
+            juzhenxuhao=int2str(k);
+            
+            filename3=strcat('-',juzhenxuhao);
+            % filename3=strcat(mname,filename2);
+            % filename4=strcat('train-',filename3);
+            %         filename3=strcat('-test',filename2);
+            filename4=strcat(name,filename3);
+            baocun=strcat(folderName{a},'\');
+            save([baocun,filename4],'A');
+            k=k+1;
+            j=j-1;
+            C1=B;
+        end
+    end
+end
