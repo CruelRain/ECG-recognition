@@ -1,0 +1,41 @@
+% Awenjian=dir('E:\实验\识别结果\*.mat');
+% Awenjian=dir('E:\实验\矩阵拆分\拆分\测试\*.dir');
+% rootdir =' E:\实验\矩阵拆分\拆分\测试\';
+% subdir = dir(rootdir);
+clc;
+clear all;
+maindir = 'E:\实验\矩阵拆分\拆分\测试\正常';
+subdir = dir( maindir ); % 先确定子文件夹
+main2dir = 'E:\实验\矩阵拆分\矩阵分层\正常';
+sub2dir = dir( main2dir );
+% for i = 1:2
+for i = 1 : length( subdir )
+    if( isequal( subdir( i ).name, '.' ) || ...
+            isequal( subdir( i ).name, '..' ) || ...
+            ~subdir( i ).isdir ) % 如果不是目录跳过
+        continue;
+    end
+    subdirpath = fullfile( maindir, subdir( i ).name, '*.mat' );
+    images = dir( subdirpath ); % 在这个子文件夹下找后缀为jpg的文件
+    % 遍历每张图片
+    for j = 1 : length( images )
+        imagepath = fullfile( maindir, subdir( i ).name, images( j ).name );
+        load(['E:\实验\矩阵拆分\拆分\测试\正常\', subdir( i ).name,'\' images( j ).name]);
+        B=A;
+        for l= 1 : length( sub2dir )
+    if( isequal( subdir( l ).name, '.' ) || ...
+            isequal( subdir( l ).name, '..' ) || ...
+            ~subdir( l ).isdir ) % 如果不是目录跳过
+        continue;
+    end
+     subdirpath = fullfile( maindir, subdir( i ).name, '*.mat' );
+    images = dir( subdirpath ); % 在这个子文件夹下找后缀为jpg的文件
+    % 遍历每张图片
+    for k = 1 : length( images )
+        imagepath = fullfile( maindir, subdir( l ).name, images( k ).name );
+        load(['E:\实验\矩阵拆分\拆分\测试\正常\', subdir( l ).name,'\' images( k ).name]);
+        C=A;
+        
+
+    end
+end
