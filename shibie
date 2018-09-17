@@ -1,0 +1,42 @@
+cd('E:\实验\模板匹配分析\');
+a=0;
+c=1;
+R=zeros(700,1);
+path=strcat('E:\实验\模板匹配结果\*.mat');
+Awenjian=dir(path);
+for i=1:7836
+    
+    load(['E:\实验\模板匹配结果\',Awenjian(i).name]);
+    disp(Awenjian(i).name);
+    %     bijiao=Awenjian(i).name(2:6);
+    %     if i~=bijiao
+    %         d=d+1;
+    %     % for a=1:5
+    %     % max(a)=max(Result(:,a));
+    %     else
+    [max_Result,index]=max(Result);%找出矩阵列的最大值及其位置 
+    % xuhao=strcat('0',num2str(a));
+    Name=Awenjian(i).name(1:6);
+     Nemo=Awenjian(i).name(2:6);
+     d=str2double(Nemo);
+    saveTrainName=strcat(Name,'_test');
+    savePath=strcat('E:\实验\模板匹配分析\',saveTrainName);
+    save(savePath,'index');
+    %     a=a+1;
+    %     for c=1:5
+    b=index(1,1);
+    if b~=d
+        R(c,1)=d;
+        c=c+1;
+        a=a+1;%错误识别次数
+    end
+end
+% end
+n=a/7836;
+ save('R');
+% save(['E:\实验\识别结果',' R'])
+
+
+
+
+
