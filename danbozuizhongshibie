@@ -1,0 +1,46 @@
+cd('E:\实验\单波（备份）\50\识别结果\');
+e=1;
+f=1;
+j=0;
+k=0;
+l=0;
+B=zeros(700,1);
+T=zeros(700,1);
+% path=strcat('E:\实验\识别结果\*.mat');5
+% Awenjian=dir(path);
+% Awenjian=dir('E:\实验\单波（备份）\单波识别1\*.mat');
+% Rwenjian=dir('E:\实验\单波（备份）\单波阈值\*.mat');
+Awenjian=dir('E:\实验\单波（备份）\150\匹配1\*.mat');
+Rwenjian=dir('E:\实验\单波（备份）\150\阈值\*.mat');
+for i=1:150
+    
+    load(['E:\实验\单波（备份）\150\匹配1\',Awenjian(i).name]);
+    disp(Awenjian(i).name);
+    %     load(['E:\实验\阈值\',Rwenjian(i).name]);
+    [max_Result,index]=max(Result);%找出矩阵列的最大值及其位置
+    % xuhao=strcat('0',num2str(a));
+    Nemo=Awenjian(i).name(2:6);
+    d=str2double(Nemo);
+    a=max_Result;
+    b=index(1,1);
+%     load(['E:\实验\单波（备份）\单波识别1\',Awenjian(b).name]);
+    Neme=Awenjian(b).name(2:6);
+    p=str2double(Neme);
+    load(['E:\实验\单波（备份）\150\阈值\',num2str(p),'.mat']);
+    c=A(1,1);
+    if b==d
+        if a>c
+            j=j+1;
+        else
+            k=k+1;
+            B(e,1)=d;
+            e=e+1;
+        end
+    else
+        l=l+1;
+        T(f,1)=d;
+        f=f+1;
+    end
+end
+  n=j/150;
+   save('B','T');
